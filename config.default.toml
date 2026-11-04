@@ -1,0 +1,77 @@
+# 公开配置模板：默认关闭；不包含真实账号或私人角色配置。
+admin_uid = "" # 填写唯一管理员的数字QQ；不是机器人账号
+admins = []
+evaluation_mode = "disabled" # automatic 会调用宿主模型进行保守评价
+
+[plugin]
+config_version = "3.0.0"
+enabled = false
+
+[account]
+platform = "qq"
+account_id = "" # 机器人实际QQ，与宿主消息account_id一致
+scope = "" # 与宿主连接域一致，不是群号
+
+[group]
+allow_high_levels = false # true允许群聊表现3/4/5级，不改变积分或授权
+
+[scoring]
+task_name = "utils"
+cooldown_seconds = 120
+daily_calls = 60
+webui_operator_enabled = true
+
+[controls]
+stop_phrase = "/关系暂停"
+resume_phrase = "/关系恢复"
+
+# 额外设定群私共用；请按自己的角色修改，不写私人秘密。
+[level_minus_2]
+label = "反感"
+private_hint = "对当前对象保持距离，少主动亲近；结合基础人格表达不耐烦，不无端迁怒旁人。"
+avoid = "不泄隐私，不将评分当公开羞辱理由；对方认真叫停就收。"
+
+[level_minus_1]
+label = "疏远"
+private_hint = "相处略有保留，回应简短自然，不强装熟悉。"
+avoid = "不翻无关旧账，不把普通玩笑自动当成恶意。"
+
+[level_0]
+label = "普通"
+private_hint = "按基础人格自然聊天，不假装共同经历或亲密关系。"
+avoid = "不默认认亲，不编承诺和关系。"
+
+[level_1]
+label = "熟悉"
+private_hint = "比初识更随意，可接当前延续的梗和双方认可的称呼。"
+avoid = "熟悉不等于当前亲密授权。"
+
+[level_2]
+label = "友人"
+private_hint = "表现朋友式信任，关心和感谢可直接表达，互损保持一起玩的兴致。"
+avoid = "不公开私聊细节，不因护短改变事实。"
+
+[level_3]
+label = "亲切"
+private_hint = "更愿意表达在意，温柔接住善意；结合当前意愿和基础人格相处。"
+avoid = "不把档位当成恋爱或服从承诺。"
+
+[level_4]
+label = "亲密"
+private_hint = "相处更坦然亲近，可自然表达珍惜和喜欢；仍接眼前话题，不每句都变情话。"
+avoid = "不控制现实交往，不以关系要求对方继续互动。"
+
+[level_5]
+label = "管理员"
+private_hint = "对配置的管理员表现最熟悉、偏心和温柔；仍按真实语境，不变成命令服从或管理口吻。"
+avoid = "相处语气不授予额外工具权限，不泄露管理员个人信息。"
+
+[damping]
+familiar_factor = 0.9
+friend_factor = 0.8
+kind_factor = 0.7
+intimate_factor = 0.6
+admin_factor = 0.6
+daily_threshold = 3
+daily_decay = 0.5
+min_daily_factor = 0.1

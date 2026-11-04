@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+data/
+*.sqlite*
+config.toml
+config_back/
+logs/
+backups/
+*.bak
+*.backup*
+.env
+.env.*
+!.env.example
+.venv/
+*.zip

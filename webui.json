@@ -1,0 +1,87 @@
+{
+  "schema_version": 2,
+  "required_capabilities": ["declarative_basic"],
+  "workspace_title": "好感管理",
+  "pages": [{
+    "id": "relationship_admin",
+    "mode": "declarative",
+    "title": "调整好感与授权",
+    "description": "仅宿主已鉴权 WebUI operator；本机管理身份不等于聊天 QQ 管理员。仅查询指定对象，不列出全库。",
+    "placement": "workspace",
+    "icon": "database",
+    "auto_refresh": false,
+    "queries": {
+      "subject": {
+        "api": "relation_webui_query",
+        "version": "1",
+        "parameters": {"target_qq": {"type": "string", "max_length": 20}}
+      }
+    },
+    "actions": {
+      "set_score": {
+        "api": "relation_webui_set_score",
+        "version": "1",
+        "confirmation": "以本机 WebUI operator 身份设置查询对象的好感分？不会更改其手动授权。",
+        "parameters": {
+          "target_qq": {"type": "string", "required": true, "max_length": 20},
+          "score": {"type": "number", "required": true, "minimum": -200, "maximum": 200},
+          "expected_version": {"type": "integer", "required": true, "minimum": 0}
+        },
+        "arguments": {
+          "target_qq": {"source": "subject", "field": "target_qq"},
+          "expected_version": {"source": "subject", "field": "version"}
+        }
+      },
+      "grant3": {
+        "api": "relation_webui_grant", "version": "1",
+        "confirmation": "以本机 WebUI operator 身份授予查询对象独立的 3 级权限？",
+        "parameters": {
+          "target_qq": {"type": "string", "required": true, "max_length": 20},
+          "level": {"type": "integer", "required": true, "choices": [3]},
+          "expected_version": {"type": "integer", "required": true, "minimum": 0}
+        },
+        "arguments": {"target_qq": {"source": "subject", "field": "target_qq"}, "expected_version": {"source": "subject", "field": "version"}, "level": {"source": "subject", "field": "grant3"}}
+      },
+      "grant4": {
+        "api": "relation_webui_grant", "version": "1",
+        "confirmation": "以本机 WebUI operator 身份授予查询对象独立的 4 级权限？",
+        "parameters": {
+          "target_qq": {"type": "string", "required": true, "max_length": 20},
+          "level": {"type": "integer", "required": true, "choices": [4]},
+          "expected_version": {"type": "integer", "required": true, "minimum": 0}
+        },
+        "arguments": {"target_qq": {"source": "subject", "field": "target_qq"}, "expected_version": {"source": "subject", "field": "version"}, "level": {"source": "subject", "field": "grant4"}}
+      },
+      "revoke": {
+        "api": "relation_webui_grant", "version": "1",
+        "confirmation": "撤销查询对象的手动 3/4 级授权？不会改分，也不能撤销固定身份的管理员 5 级。",
+        "parameters": {
+          "target_qq": {"type": "string", "required": true, "max_length": 20},
+          "level": {"type": "integer", "required": true, "choices": [0]},
+          "expected_version": {"type": "integer", "required": true, "minimum": 0}
+        },
+        "arguments": {"target_qq": {"source": "subject", "field": "target_qq"}, "expected_version": {"source": "subject", "field": "version"}, "level": {"source": "subject", "field": "revoke"}}
+      }
+    },
+    "content": [
+      {"type": "text", "value": "权限边界：本页面使用宿主登录后的本机 WebUI operator 管理能力，独立记录操作审计，不冒充聊天 QQ 管理员。请先输入 QQ 后点击页面刷新查询；写操作绑定上次查询对象及版本，冲突请重新查询。"},
+      {"type": "text", "value": "普通对象好感分范围 -200 到 200；积分档阈值为 30、70、100、150。100/150 仅代表积分档 3/4，自动关系等级最高 2，实际 3/4 级仍须手动授权。固定管理员好感分恒为 200，不能改分。"},
+      {"type": "input", "name": "target_qq", "label": "目标数字 QQ（非昵称）", "value": ""},
+      {"type": "text", "value": {"source": "subject", "field": "message"}},
+      {"type": "grid", "columns": 3, "children": [
+        {"type": "stat", "label": "已查询 QQ", "value": {"source": "subject", "field": "target_qq"}},
+        {"type": "stat", "label": "好感分", "value": {"source": "subject", "field": "score"}},
+        {"type": "stat", "label": "积分档（不是授权）", "value": {"source": "subject", "field": "score_rank"}},
+        {"type": "stat", "label": "有效等级", "value": {"source": "subject", "field": "effective_level"}},
+        {"type": "stat", "label": "手动授权", "value": {"source": "subject", "field": "manual_grant"}},
+        {"type": "stat", "label": "自动关系等级", "value": {"source": "subject", "field": "auto_level"}},
+        {"type": "stat", "label": "版本", "value": {"source": "subject", "field": "version"}}
+      ]},
+      {"type": "input", "name": "score", "label": "设置普通对象好感分（-200 到 200；管理员固定 200）", "value": 0},
+      {"type": "button", "label": "设置好感分", "action": "set_score", "variant": "danger", "disabled_when": {"reference": {"source": "subject", "field": "target_qq"}, "operator": "empty"}},
+      {"type": "button", "label": "授权 3 级", "action": "grant3", "variant": "danger", "disabled_when": {"reference": {"source": "subject", "field": "target_qq"}, "operator": "empty"}},
+      {"type": "button", "label": "授权 4 级", "action": "grant4", "variant": "danger", "disabled_when": {"reference": {"source": "subject", "field": "target_qq"}, "operator": "empty"}},
+      {"type": "button", "label": "撤销手动授权", "action": "revoke", "variant": "danger", "disabled_when": {"reference": {"source": "subject", "field": "target_qq"}, "operator": "empty"}}
+    ]
+  }]
+}
