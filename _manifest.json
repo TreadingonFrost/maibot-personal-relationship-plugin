@@ -7,9 +7,10 @@
   "author": {"name": "TreadingonFrost", "url": "https://github.com/TreadingonFrost"},
   "license": "MIT",
   "urls": {"repository": "https://github.com/TreadingonFrost/maibot-personal-relationship-plugin"},
-  "host_application": {"min_version": "1.3.19", "max_version": "1.3.19"},
-  "i18n": {"default_locale": "zh-CN"},
-  "sdk": {"min_version": "2.21.0", "max_version": "2.21.0"},
+  "host_application": {"min_version": "1.3.19", "max_version": "1.3.99"},
+  "i18n": {"default_locale": "zh-CN", "supported_locales": ["zh-CN"]},
+  "plugin_type": "chat",
+  "sdk": {"min_version": "2.21.0", "max_version": "2.21.99"},
   "dependencies": [],
   "capabilities": ["message.get_by_id", "message.get_recent", "llm.generate"]
 }
